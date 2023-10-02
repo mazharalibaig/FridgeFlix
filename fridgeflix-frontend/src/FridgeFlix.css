@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+body {
+    background-color: #141414;
+    color: white;
+    font-family: 'Bebas Neue', Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.banner {
+    font-size: 72px;  /* Made larger as per your request */
+    margin-bottom: 40px;
+    color: #E50914;  /* Using Netflix Red for the banner */
+    letter-spacing: 2px;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+}
+
+.word-cloud {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    align-items: center;
+    width: 100%;
+    max-width: 650px;
+}
+
+.word-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* ... (rest of your CSS) ... */
+
+/* General styling for word chips to ensure consistent font */
+.word-chip.MuiChip-outlined .MuiChip-label, 
+.word-chip-selected.MuiChip-outlined .MuiChip-label {
+    font-family: 'Bebas Neue', Arial, sans-serif; /* Apply Netflix-like font */
+    font-size: 1rem; /* Size as needed */
+    text-transform: uppercase; /* Make it uppercase to fit the theme */
+}
+
+/* Default state for word chips (Before selecting) */
+.word-chip.MuiChip-outlined {
+    cursor: pointer;
+    background-color: transparent; /* Transparent or use #141414 (dark gray close to Netflix's BG color) */
+    color: white; /* White text color */
+    font-weight: bold;
+    border: 1px solid #E50914; /* Netflix Red border */
+}
+
+/* Hover effect for the word chips */
+.word-chip.MuiChip-outlined:hover {
+    background-color: rgba(229, 9, 20, 0.2); /* Slightly transparent Netflix Red for subtle effect */
+}
+
+/* Selected state for word chips (After selecting) */
+.word-chip-selected.MuiChip-outlined {
+    background-color: #E50914; /* Netflix Red */
+    color: white; /* White text */
+    border: 1px solid white; /* White border */
+}
+
+
+
+
+
+/* ... (rest of your CSS) ... */
+
+/* Default state for word chips (Before selecting) */
+.word-chip {
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+    background-color: #E50914; /* Netflix Red */
+    border-color: white;   /* White outline */
+    color: white;          /* White text color */
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Hover effect for the word chips (slight opacity change for interactivity) */
+.word-chip:hover {
+    background-color: rgba(229, 9, 20, 0.9);  /* Slightly transparent Netflix Red */
+}
+
+/* Selected state for word chips (After selecting) */
+.word-chip-selected {
+    background-color: white;  
+    border-color: white;        
+    color: black;               
+}
+
+
+.search-bar {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 25px;  /* Rounded edges */
+    overflow: hidden;  /* Ensures inner elements adhere to the rounded edges */
+}
+
+/* ... (rest of your CSS) ... */
+
+/* Style for the search input text */
+.search-bar .MuiInputBase-input {
+    color: black; /* Black text color for contrast against white background */
+    font-family: 'Bebas Neue', Arial, sans-serif; /* Use the Netflix-like font */
+    font-size: 1rem; /* Adjust size as needed */
+}
+
+/* Adjust the search bar border and remove notches */
+.search-bar .MuiOutlinedInput-root {
+    border-radius: 25px; /* Rounded edges */
+}
+
+.search-bar .MuiOutlinedInput-notchedOutline {
+    border-color: #E50914; /* Border color to match Netflix theme */
+    border-width: 2px; /* Making the border slightly thicker */
+}
+
+/* Hover effect for the outlined input border */
+.search-bar .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: white; /* White border color on hover */
+}
+
+/* When the search input is focused */
+.search-bar .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #E50914;
+}
+.search-bar .MuiInputLabel-outlined.Mui-focused {
+    color: #E50914;
+}
+
+/* Remove the notches from the search bar */
+.search-bar .MuiOutlinedInput-notchedOutline {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+.trademark-symbol {
+    font-size: 0.5em;
+    vertical-align: super;
+}
+
+.recipe-results {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Three dishes in one row */
+    gap: 20px 50px; /* Gap between rows and columns */
+  }
+  
+  .recipe-item {
+    text-align: center;
+  }
+  
+  .recipe-item .recipe-title {
+    cursor: pointer;
+    transition: color 0.3s, background-color 0.3s;
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    border: 3px solid #E50914;
+    background-color: #E50914;
+    color: #fff;
+  }
+  
+  .recipe-item .recipe-title:hover {
+    color: #E50914;
+    background-color: #fff;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #E50914;
+    transition: color 0.3s;
+  }
+  
+  a:hover {
+    color: #fff;
+  }
+  
