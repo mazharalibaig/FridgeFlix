@@ -2,74 +2,12 @@ import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import { Chip, Button, CircularProgress } from "@mui/material";
 import "./FridgeFlix.css";
-
-const VEGETABLES = [
-  "avocado",
-  "bell peppers",
-  "broccoli",
-  "cabbage",
-  "carrots",
-  "cauliflower",
-  "celery",
-  "cucumber",
-  "garlic",
-  "lettuce",
-  "mushrooms",
-  "olives",
-  "onions",
-  "peppers",
-  "potatoes",
-  "spinach",
-  "tomatoes",
-];
-
-const PROTEINS = [
-  "anchovies",
-  "beef",
-  "bread",
-  "butter",
-  "cheese",
-  "chicken",
-  "clams",
-  "crab",
-  "duck",
-  "eggs",
-  "fish",
-  "lamb",
-  "lobster",
-  "salmon",
-  "sardines",
-  "shrimp",
-  "tofu",
-  "trout",
-  "turkey",
-  "tuna",
-];
-
-const SPICES = [
-  "basil",
-  "black pepper",
-  "cardamom",
-  "chili powder",
-  "chives",
-  "cilantro",
-  "cinnamon",
-  "cloves",
-  "coriander",
-  "cumin",
-  "fennel",
-  "ginger",
-  "mint",
-  "nutmeg",
-  "oregano",
-  "paprika",
-  "parsley",
-  "rosemary",
-  "saffron",
-  "salt",
-  "thyme",
-  "turmeric",
-];
+import { VEGETABLES, PROTEINS, SPICES } from "./Constants";
+import Banner from "./Banner";
+import WordCloud from "./WordCloud";
+import RecipeResults from "./RecipeResults";
+import Footer from "./Footer";
+import { distributeWordsToRows } from "./utilities";
 
 const SearchComponent = () => {
   const [selectedWords, setSelectedWords] = useState([]);
@@ -106,10 +44,13 @@ const SearchComponent = () => {
     });
 
     try {
-      const response = await axios.post("https://cba5-2601-282-4100-9f10-68d5-7d8f-1bf5-2e12.ngrok-free.app/search", {
-        searchTerm: ingredients.join(" "),
-        mealType: mealType,
-      });
+      const response = await axios.post(
+        "https://cba5-2601-282-4100-9f10-68d5-7d8f-1bf5-2e12.ngrok-free.app/search",
+        {
+          searchTerm: ingredients.join(" "),
+          mealType: mealType,
+        }
+      );
       setRecipes(response.data.metaphorResults);
     } catch (error) {
       console.error("Error making API call:", error);
@@ -205,97 +146,5 @@ const SearchComponent = () => {
     </div>
   );
 };
-
-const Banner = () => (
-  <div className="banner">
-    FridgeFlix<span className="trademark-symbol">®</span>
-  </div>
-);
-
-const WordCloud = ({
-  words,
-  selectedWords,
-  onClick,
-  header,
-  chipClass,
-  selectedChipClass,
-  headerClass,
-  onCustomInputChange,
-  customInputValue,
-}) => (
-  <div className="word-cloud">
-    {header && <div className={headerClass}>{header}</div>}
-    {words.map((row, rowIndex) => (
-      <div key={rowIndex} className="word-row">
-        {row.map((word) => (
-          <Chip
-            key={word}
-            label={word}
-            onClick={() => onClick(word)}
-            variant="outlined"
-            className={
-              selectedWords.includes(word) ? selectedChipClass : chipClass
-            }
-          />
-        ))}
-      </div>
-    ))}
-    {header === "Spices" && (
-      <input
-        className="custom-ingredient-input"
-        value={customInputValue || ""}
-        placeholder={`Enter Items not found above as "Squash Venison Fenugreek"`}
-        onChange={(e) => onCustomInputChange(e.target.value)}
-      />
-    )}
-  </div>
-);
-
-const RecipeResults = ({ recipes }) => (
-  <div className="recipe-results">
-    {recipes.map((recipe, index) => {
-      const dishName = Object.keys(recipe)[0];
-      const links = recipe[dishName];
-      return (
-        <div key={index} className="recipe-item">
-          <h3 className="recipe-title">{dishName}</h3>
-          <ul style={{ listStyleType: "none", padding: 0 }}>
-            {links.map((link, linkIndex) => (
-              <li key={linkIndex}>
-                <a href={link} target="_blank" rel="noopener noreferrer">
-                  {new URL(link).hostname}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    })}
-  </div>
-);
-
-const Footer = () => (
-  <div className="footer">
-    Created by{" "}
-    <a
-      href="https://www.linkedin.com/in/mazharalibaig/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Mazhar Ali Baig
-    </a>
-  </div>
-);
-
-function distributeWordsToRows(words) {
-  let rows = [];
-  let remainingWords = [...words];
-  while (remainingWords.length) {
-    let rowCount = Math.ceil(remainingWords.length * 0.4);
-    let row = remainingWords.splice(0, rowCount);
-    rows.push(row);
-  }
-  return rows;
-}
 
 export default SearchComponent;
