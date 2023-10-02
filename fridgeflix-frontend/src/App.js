@@ -76,6 +76,7 @@ const SearchComponent = () => {
         onClick={handleWordClick}
         header="Meal Type"
         chipClass="meal-type-chip"
+        selectedChipClass="meal-type-chip-selected"
         headerClass="meal-type-header"
       />
       <WordCloud
@@ -84,6 +85,7 @@ const SearchComponent = () => {
         onClick={handleWordClick}
         header="Vegetables"
         chipClass="word-chip"
+        selectedChipClass="word-chip-selected"
         headerClass="word-cloud-header"
       />
       <WordCloud
@@ -92,6 +94,7 @@ const SearchComponent = () => {
         onClick={handleWordClick}
         header="Proteins"
         chipClass="word-chip"
+        selectedChipClass="word-chip-selected"
         headerClass="word-cloud-header"
       />
       <WordCloud
@@ -100,6 +103,7 @@ const SearchComponent = () => {
         onClick={handleWordClick}
         header="Spices"
         chipClass="word-chip"
+        selectedChipClass="word-chip-selected"
         headerClass="word-cloud-header"
       />
       <Button
@@ -124,7 +128,8 @@ const Banner = () => (
   </div>
 );
 
-const WordCloud = ({ words, selectedWords, onClick, header, chipClass, headerClass }) => (
+
+const WordCloud = ({ words, selectedWords, onClick, header, chipClass, selectedChipClass, headerClass }) => (
   <div className="word-cloud">
     {header && <div className={headerClass}>{header}</div>}
     {words.map((row, rowIndex) => (
@@ -136,7 +141,7 @@ const WordCloud = ({ words, selectedWords, onClick, header, chipClass, headerCla
             onClick={() => onClick(word)}
             variant="outlined"
             className={
-              selectedWords.includes(word) ? "word-chip-selected" : chipClass
+              selectedWords.includes(word) ? selectedChipClass : chipClass
             }
           />
         ))}
