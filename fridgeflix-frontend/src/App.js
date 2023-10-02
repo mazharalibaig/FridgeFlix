@@ -242,11 +242,11 @@ const WordCloud = ({
     ))}
     {header === "Spices" && (
       <input
-      className="custom-ingredient-input"
-      value={customInputValue || ''}
-      placeholder={`Enter Items not found above as "Squash Venison Fenugreek"`}
-      onChange={(e) => onCustomInputChange(e.target.value)}
-    />
+        className="custom-ingredient-input"
+        value={customInputValue || ""}
+        placeholder={`Enter Items not found above as "Squash Venison Fenugreek"`}
+        onChange={(e) => onCustomInputChange(e.target.value)}
+      />
     )}
   </div>
 );
@@ -276,7 +276,14 @@ const RecipeResults = ({ recipes }) => (
 
 const Footer = () => (
   <div className="footer">
-    Created by <a href="https://www.linkedin.com/in/mazharalibaig/" target="_blank" rel="noopener noreferrer">Mazhar Ali Baig</a>
+    Created by{" "}
+    <a
+      href="https://www.linkedin.com/in/mazharalibaig/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Mazhar Ali Baig
+    </a>
   </div>
 );
 
