@@ -213,3 +213,42 @@ a:hover {
 .reset-link:hover {
     color: #ff3333; /* Slightly brighter red on hover */
 }
+
+.custom-ingredient-input {
+    width: 50%;
+    padding: 5px 10px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: #141414; /* making text color dark since the background is white */
+    outline: none;  /* removing the browser's default outline effect */
+    font-size: 1rem; /* setting font size */
+    font-family: 'Bebas Neue', Arial, sans-serif; /* using the same font as the rest of the UI */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* giving it a small shadow for a raised effect */
+    transition: box-shadow 0.3s ease; /* transition for smooth shadow effect on focus */
+  }
+  
+  .custom-ingredient-input:focus {
+    box-shadow: 0px 0px 5px rgba(229, 9, 20, 0.7); /* changing shadow color to Netflix Red on focus */
+  }  
+
+.custom-ingredient-input::placeholder {
+    color: lightgrey;
+}
+
+.footer {
+    margin-top: 50px;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .footer a {
+    color: #E50914; /* Netflix Red */
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    color: #ff3333; /* Slightly brighter red on hover */
+  }
+  

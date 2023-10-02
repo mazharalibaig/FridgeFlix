@@ -1,26 +1,79 @@
 import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
-import {
-  Chip,
-  Button,
-  CircularProgress
-} from "@mui/material";
+import { Chip, Button, CircularProgress } from "@mui/material";
 import "./FridgeFlix.css";
 
 const VEGETABLES = [
-  "avocado", "bell peppers", "broccoli", "cabbage", "carrots", "cauliflower", "celery", "cucumber", "garlic", "lettuce", "mushrooms", "olives", "onions", "peppers", "potatoes", "spinach", "tomatoes"
+  "avocado",
+  "bell peppers",
+  "broccoli",
+  "cabbage",
+  "carrots",
+  "cauliflower",
+  "celery",
+  "cucumber",
+  "garlic",
+  "lettuce",
+  "mushrooms",
+  "olives",
+  "onions",
+  "peppers",
+  "potatoes",
+  "spinach",
+  "tomatoes",
 ];
 
 const PROTEINS = [
-  "anchovies", "beef", "bread", "butter", "cheese", "chicken", "clams", "crab", "duck", "eggs", "fish", "lamb", "lobster", "salmon", "sardines", "shrimp", "tofu", "trout", "turkey", "tuna"
+  "anchovies",
+  "beef",
+  "bread",
+  "butter",
+  "cheese",
+  "chicken",
+  "clams",
+  "crab",
+  "duck",
+  "eggs",
+  "fish",
+  "lamb",
+  "lobster",
+  "salmon",
+  "sardines",
+  "shrimp",
+  "tofu",
+  "trout",
+  "turkey",
+  "tuna",
 ];
 
 const SPICES = [
-  "basil", "black pepper", "cardamom", "chili powder", "chives", "cilantro", "cinnamon", "cloves", "coriander", "cumin", "fennel", "ginger", "mint", "nutmeg", "oregano", "paprika", "parsley", "rosemary", "saffron", "salt", "thyme", "turmeric"
+  "basil",
+  "black pepper",
+  "cardamom",
+  "chili powder",
+  "chives",
+  "cilantro",
+  "cinnamon",
+  "cloves",
+  "coriander",
+  "cumin",
+  "fennel",
+  "ginger",
+  "mint",
+  "nutmeg",
+  "oregano",
+  "paprika",
+  "parsley",
+  "rosemary",
+  "saffron",
+  "salt",
+  "thyme",
+  "turmeric",
 ];
 
 const SearchComponent = () => {
   const [selectedWords, setSelectedWords] = useState([]);
+  const [customIngredients, setCustomIngredients] = useState({});
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,14 +90,25 @@ const SearchComponent = () => {
 
   const handleSearch = useCallback(async () => {
     setIsLoading(true);
-  
-    let mealType = selectedWords.filter(word => ["breakfast", "lunch", "dinner"].includes(word))[0];
-    let ingredients = selectedWords.filter(word => !["breakfast", "lunch", "dinner"].includes(word));
-  
+
+    let mealType = selectedWords.filter((word) =>
+      ["breakfast", "lunch", "dinner"].includes(word)
+    )[0];
+    let ingredients = selectedWords.filter(
+      (word) => !["breakfast", "lunch", "dinner"].includes(word)
+    );
+
+    // Add custom ingredients to the list
+    Object.values(customIngredients).forEach((ing) => {
+      if (ing) {
+        ingredients.push(...ing.split(" "));
+      }
+    });
+
     try {
       const response = await axios.post("http://localhost:9000/search", {
-        searchTerm: ingredients.join(' '),
-        mealType: mealType
+        searchTerm: ingredients.join(" "),
+        mealType: mealType,
       });
       setRecipes(response.data.metaphorResults);
     } catch (error) {
@@ -52,60 +116,79 @@ const SearchComponent = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedWords]);
+  }, [selectedWords, customIngredients]);
 
   const handleReset = () => {
-    setSelectedWords([]); // Clearing the selected words
+    setSelectedWords([]);
+    setCustomIngredients({});
   };
 
   useEffect(() => {
     if (recipes.length > 0) {
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: "smooth"
-        });
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
     }
   }, [recipes]);
 
   return (
     <div className="container">
       <Banner />
-      <WordCloud 
+      <WordCloud
+        category="Meal Type"
         words={[["breakfast", "lunch", "dinner"]]}
         selectedWords={selectedWords}
         onClick={handleWordClick}
+        onCustomInputChange={(value) =>
+          setCustomIngredients((prev) => ({ ...prev, MealType: value }))
+        }
         header="Meal Type"
         chipClass="meal-type-chip"
         selectedChipClass="meal-type-chip-selected"
         headerClass="meal-type-header"
       />
       <WordCloud
+        category="Vegetables"
         words={distributeWordsToRows(VEGETABLES)}
         selectedWords={selectedWords}
         onClick={handleWordClick}
+        onCustomInputChange={(value) =>
+          setCustomIngredients((prev) => ({ ...prev, Vegetables: value }))
+        }
         header="Vegetables"
         chipClass="word-chip"
         selectedChipClass="word-chip-selected"
         headerClass="word-cloud-header"
       />
       <WordCloud
+        category="Proteins"
         words={distributeWordsToRows(PROTEINS)}
         selectedWords={selectedWords}
         onClick={handleWordClick}
+        onCustomInputChange={(value) =>
+          setCustomIngredients((prev) => ({ ...prev, Proteins: value }))
+        }
         header="Proteins"
         chipClass="word-chip"
         selectedChipClass="word-chip-selected"
         headerClass="word-cloud-header"
       />
       <WordCloud
+        category="Spices"
         words={distributeWordsToRows(SPICES)}
         selectedWords={selectedWords}
+        customInputValue={customIngredients.Spices}
         onClick={handleWordClick}
+        onCustomInputChange={(value) =>
+          setCustomIngredients((prev) => ({ ...prev, Spices: value }))
+        }
         header="Spices"
         chipClass="word-chip"
         selectedChipClass="word-chip-selected"
         headerClass="word-cloud-header"
       />
+      <div style={{ marginTop: "20px" }}></div>
       <Button
         className="generate-recipes-button"
         onClick={handleSearch}
@@ -118,6 +201,7 @@ const SearchComponent = () => {
         Reset Selection
       </div>
       <RecipeResults recipes={recipes} />
+      <Footer />
     </div>
   );
 };
@@ -128,8 +212,17 @@ const Banner = () => (
   </div>
 );
 
-
-const WordCloud = ({ words, selectedWords, onClick, header, chipClass, selectedChipClass, headerClass }) => (
+const WordCloud = ({
+  words,
+  selectedWords,
+  onClick,
+  header,
+  chipClass,
+  selectedChipClass,
+  headerClass,
+  onCustomInputChange,
+  customInputValue,
+}) => (
   <div className="word-cloud">
     {header && <div className={headerClass}>{header}</div>}
     {words.map((row, rowIndex) => (
@@ -147,6 +240,14 @@ const WordCloud = ({ words, selectedWords, onClick, header, chipClass, selectedC
         ))}
       </div>
     ))}
+    {header === "Spices" && (
+      <input
+      className="custom-ingredient-input"
+      value={customInputValue || ''}
+      placeholder={`Enter Items not found above as "Squash Venison Fenugreek"`}
+      onChange={(e) => onCustomInputChange(e.target.value)}
+    />
+    )}
   </div>
 );
 
@@ -170,6 +271,12 @@ const RecipeResults = ({ recipes }) => (
         </div>
       );
     })}
+  </div>
+);
+
+const Footer = () => (
+  <div className="footer">
+    Created by <a href="https://www.linkedin.com/in/mazharalibaig/" target="_blank" rel="noopener noreferrer">Mazhar Ali Baig</a>
   </div>
 );
 
