@@ -1,70 +1,111 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
-import { InputAdornment, TextField, IconButton, Chip, CircularProgress } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import {
+  Chip,
+  Button,
+  CircularProgress
+} from "@mui/material";
 import "./FridgeFlix.css";
 
-const WORD_CLOUD = [
-  "chicken",
-  "rice",
-  "potatoes",
-  "onions",
-  "bell peppers",
-  "beef",
-  "broccoli",
-  "bread",
-  "milk",
-  "eggs",
-  "cheese",
-  "lettuce",
-  "tomatoes",
-  "butter",
-  "garlic",
-];
+const VEGETABLES = [
+  "avocado", "bell peppers", "broccoli", "cabbage", "carrots", "cauliflower", "celery", "cucumber", "garlic", "lettuce", "mushrooms", "olives", "onions", "peppers", "potatoes", "spinach", "tomatoes"
+]
+
+const PROTEINS = [
+  "anchovies", "beef", "bread", "butter", "cheese", "chicken", "clams", "crab", "duck", "eggs", "fish", "lamb", "lobster", "salmon", "sardines", "shrimp", "tofu", "trout", "turkey", "tuna"
+]
+
+const SPICES = [
+  "basil", "black pepper", "cardamom", "chili powder", "chives", "cilantro", "cinnamon", "cloves", "coriander", "cumin", "fennel", "ginger", "mint", "nutmeg", "oregano", "paprika", "parsley", "rosemary", "saffron", "salt", "thyme", "turmeric"
+]
 
 const SearchComponent = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedWords, setSelectedWords] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  const handleWordClick = useCallback((word) => {
-    if (selectedWords.includes(word)) {
-      setSelectedWords((prevWords) => prevWords.filter((w) => w !== word));
-    } else {
-      setSelectedWords((prevWords) => [...prevWords, word]);
-    }
-    setSearchTerm((prevTerm) => `${prevTerm} ${word} `);
-  }, [selectedWords]);
+  const handleWordClick = useCallback(
+    (word) => {
+      if (selectedWords.includes(word)) {
+        setSelectedWords((prevWords) => prevWords.filter((w) => w !== word));
+      } else {
+        setSelectedWords((prevWords) => [...prevWords, word]);
+      }
+    },
+    [selectedWords]
+  );
 
   const handleSearch = useCallback(async () => {
-    setLoading(true);
+    setIsLoading(true);
+  
+    let mealType = selectedWords.filter(word => ["breakfast", "lunch", "dinner"].includes(word))[0];
+    let ingredients = selectedWords.filter(word => !["breakfast", "lunch", "dinner"].includes(word));
+  
     try {
-      const response = await axios.post("http://localhost:9000/search", { searchTerm });
+      const response = await axios.post("http://localhost:9000/search", {
+        searchTerm: ingredients.join(' '),
+        mealType: mealType
+      });
       setRecipes(response.data.metaphorResults);
     } catch (error) {
       console.error("Error making API call:", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }, [searchTerm]);
+  }, [selectedWords]);
 
-  const wordRows = distributeWordsToRows(WORD_CLOUD);
+  useEffect(() => {
+    if (recipes.length > 0) {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+    }
+  }, [recipes]);
 
   return (
     <div className="container">
       <Banner />
-      <SearchInput
-        value={searchTerm}
-        onSearch={handleSearch}
-        onChange={setSearchTerm}
-        loading={loading}
-      />
-      <WordCloud
-        words={wordRows}
+      <WordCloud 
+        words={[["breakfast", "lunch", "dinner"]]}
         selectedWords={selectedWords}
         onClick={handleWordClick}
+        header="Meal Type"
+        chipClass="meal-type-chip"
+        headerClass="meal-type-header"
       />
+      <WordCloud
+        words={distributeWordsToRows(VEGETABLES)}
+        selectedWords={selectedWords}
+        onClick={handleWordClick}
+        header="Vegetables"
+        chipClass="word-chip"
+        headerClass="word-cloud-header"
+      />
+      <WordCloud
+        words={distributeWordsToRows(PROTEINS)}
+        selectedWords={selectedWords}
+        onClick={handleWordClick}
+        header="Proteins"
+        chipClass="word-chip"
+        headerClass="word-cloud-header"
+      />
+      <WordCloud
+        words={distributeWordsToRows(SPICES)}
+        selectedWords={selectedWords}
+        onClick={handleWordClick}
+        header="Spices"
+        chipClass="word-chip"
+        headerClass="word-cloud-header"
+      />
+      <Button
+    className="generate-recipes-button"
+    onClick={handleSearch}
+    disabled={isLoading}
+    startIcon={isLoading ? <CircularProgress size={24} /> : null}
+>
+    {isLoading ? "Generating" : "Generate!"}
+</Button>
       <RecipeResults recipes={recipes} />
     </div>
   );
@@ -76,29 +117,9 @@ const Banner = () => (
   </div>
 );
 
-const SearchInput = ({ value, onSearch, onChange, loading }) => (
-  <div style={{ position: 'relative' }}>
-    <TextField
-      className="search-bar"
-      variant="outlined"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton onClick={onSearch} disabled={loading}>
-              <SearchIcon />
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
-    {loading && <CircularProgress size={24} style={{ position: 'absolute', top: '50%', left: '50%', marginTop: '-12px', marginLeft: '-12px' }} />}
-  </div>
-);
-
-const WordCloud = ({ words, selectedWords, onClick }) => (
+const WordCloud = ({ words, selectedWords, onClick, header, chipClass, headerClass }) => (
   <div className="word-cloud">
+    {header && <div className={headerClass}>{header}</div>}
     {words.map((row, rowIndex) => (
       <div key={rowIndex} className="word-row">
         {row.map((word) => (
@@ -107,7 +128,9 @@ const WordCloud = ({ words, selectedWords, onClick }) => (
             label={word}
             onClick={() => onClick(word)}
             variant="outlined"
-            className={selectedWords.includes(word) ? "word-chip-selected" : "word-chip"}
+            className={
+              selectedWords.includes(word) ? "word-chip-selected" : chipClass
+            }
           />
         ))}
       </div>
@@ -115,36 +138,28 @@ const WordCloud = ({ words, selectedWords, onClick }) => (
   </div>
 );
 
-const RecipeResults = ({ recipes }) => {
-  const [selectedDish, setSelectedDish] = useState(null);
-
-  return (
-    <div className="recipe-results">
-      {recipes.map((recipe, index) => {
-        const dishName = Object.keys(recipe)[0];
-        const links = recipe[dishName];
-        return (
-          <div key={index} className="recipe-item">
-            <h3 className="recipe-title" onClick={() => setSelectedDish(dishName === selectedDish ? null : dishName)}>
-              {dishName}
-            </h3>
-            {selectedDish === dishName && (
-              <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <a href={link} target="_blank" rel="noopener noreferrer">
-                      {new URL(link).hostname}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+const RecipeResults = ({ recipes }) => (
+  <div className="recipe-results">
+    {recipes.map((recipe, index) => {
+      const dishName = Object.keys(recipe)[0];
+      const links = recipe[dishName];
+      return (
+        <div key={index} className="recipe-item">
+          <h3 className="recipe-title">{dishName}</h3>
+          <ul style={{ listStyleType: "none", padding: 0 }}>
+            {links.map((link, linkIndex) => (
+              <li key={linkIndex}>
+                <a href={link} target="_blank" rel="noopener noreferrer">
+                  {new URL(link).hostname}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+);
 
 function distributeWordsToRows(words) {
   let rows = [];

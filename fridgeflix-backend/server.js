@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 9000;
 
 // Initialize rate limiting middleware
 const limiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 15 minutes
+  windowMs: 1 * 60 * 1000, // 5 minutes for prod, set to 1 minute for dev
   max: 10, // Limit each IP to 10 requests per windowMs
 });
 
@@ -38,33 +38,33 @@ function initializeServer() {
   });
 }
 
-// Handle the search request with rate limiting
 async function handleSearchRequest(req, res) {
-  console.log("Search request received");
-
-  const searchTerm = req.body.searchTerm;
-  try {
-    const dishNames = await fetchDishNamesFromOpenAI(searchTerm);
-    const recipeLinks = await fetchRecipeLinksForDishes(dishNames);
-
-    res.json({ metaphorResults: recipeLinks });
-  } catch (error) {
-    console.error("Error processing the search request:", error.message);
-    res.status(500).json({ error: "Error processing the request." });
+    console.log("Search request received");
+  
+    const { searchTerm, mealType } = req.body;
+    try {
+      const dishNames = await fetchDishNamesFromOpenAI(searchTerm, mealType);
+      const recipeLinks = await fetchRecipeLinksForDishes(dishNames);
+  
+      res.json({ metaphorResults: recipeLinks });
+    } catch (error) {
+      console.error("Error processing the search request:", error.message);
+      res.status(500).json({ error: "Error processing the request." });
+    }
   }
-}
-
-// Fetch dish names from OpenAI
-async function fetchDishNamesFromOpenAI(searchTerm) {
-  const prompt = `What made with ${searchTerm} and other spices found commonly in US kitchens, give list of 6 top dishes sorted by popularity`;
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const content = response.choices[0].message.content;
-  return [...content.matchAll(/\d+\.\s(.*?):/g)].map((match) => match[1]);
-}
+  
+  // Fetch dish names from OpenAI
+  async function fetchDishNamesFromOpenAI(searchTerm, mealType) {
+    const prompt = `What can be made with mainly ${searchTerm} for ${mealType}, give list of 6 top dishes sorted by popularity`;
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+    });
+  
+    const content = response.choices[0].message.content;
+    return [...content.matchAll(/\d+\.\s(.*?):/g)].map((match) => match[1]);
+  }
+  
 
 // Fetch recipe links for dish names
 async function fetchRecipeLinksForDishes(dishNames) {
@@ -87,6 +87,8 @@ async function fetchRecipeLinksForDishes(dishNames) {
         },
       }
     );
+
+    console.log(response.data.results);
 
     const links = response.data.results.map((result) => result.url);
     recipeLinks.push({ [dish]: links });
