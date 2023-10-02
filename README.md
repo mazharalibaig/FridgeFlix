@@ -1,5 +1,7 @@
 # FridgeFlix 🍅🍚
 
+Link: https://fridgeflix.web.app/
+
 **Ever found yourself gazing into your fridge, unsure of what dishes you could create from the ingredients inside?** Look no further! **FridgeFlix** is here to inspire your culinary adventures. FridgeFlix recommends you dishes from your choice of ingredients!
 
 Utilizing the power of OpenAI and Metaphor APIs, FridgeFlix provides you with suggestions based on your ingredients and points you towards the best recipes from renowned culinary websites. Dive into your next cooking session with confidence and zest!
