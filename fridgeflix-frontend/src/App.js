@@ -45,7 +45,7 @@ const SearchComponent = () => {
 
     try {
       const response = await axios.post(
-        "https://cba5-2601-282-4100-9f10-68d5-7d8f-1bf5-2e12.ngrok-free.app/search",
+        "https://0129-2601-282-4100-9f10-68d5-7d8f-1bf5-2e12.ngrok-free.app/search",
         {
           searchTerm: ingredients.join(" "),
           mealType: mealType,

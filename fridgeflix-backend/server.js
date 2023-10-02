@@ -4,7 +4,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import OpenAI from "openai";
 import axios from "axios";
-import rateLimit from "express-rate-limit"; // Import the rate-limiting middleware
+import rateLimit from "express-rate-limit";
 
 config();
 
@@ -15,20 +15,34 @@ const openai = new OpenAI({
 const app = express();
 const PORT = process.env.PORT || 9000;
 
+const resultCache = {}; // Cache to store results of previous queries
+
 // Initialize rate limiting middleware
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 5 minutes for prod, set to 1 minute for dev
-  max: 10, // Limit each IP to 10 requests per windowMs
+  windowMs: 3 * 60 * 1000,
+  max: 10,
 });
 
-initializeMiddlewares();
-initializeServer();
-
-// Apply rate limiting middleware to the /search endpoint
-app.post("/search", limiter, handleSearchRequest);
+function generateCacheKey(ingredients, mealType) {
+  return ingredients.sort().join("|") + "_" + mealType;
+}
 
 function initializeMiddlewares() {
-  app.use(cors());
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        const allowedOrigins = [
+          "http://localhost:3000",
+          "https://fridgeflix.web.app",
+        ];
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+    })
+  );
   app.use(bodyParser.json());
 }
 
@@ -39,34 +53,39 @@ function initializeServer() {
 }
 
 async function handleSearchRequest(req, res) {
-    console.log("Search request received");
-  
-    const { searchTerm, mealType } = req.body;
-    try {
-      const dishNames = await fetchDishNamesFromOpenAI(searchTerm, mealType);
-      const recipeLinks = await fetchRecipeLinksForDishes(dishNames);
-  
-      res.json({ metaphorResults: recipeLinks });
-    } catch (error) {
-      console.error("Error processing the search request:", error.message);
-      res.status(500).json({ error: "Error processing the request." });
-    }
-  }
-  
-  // Fetch dish names from OpenAI
-  async function fetchDishNamesFromOpenAI(searchTerm, mealType) {
-    const prompt = `What can be made with mainly ${searchTerm} for ${mealType}, give list of 6 top dishes sorted by popularity`;
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-    });
-  
-    const content = response.choices[0].message.content;
-    return [...content.matchAll(/\d+\.\s(.*?):/g)].map((match) => match[1]);
-  }
-  
+  console.log("Search request received");
 
-// Fetch recipe links for dish names
+  const { searchTerm, mealType } = req.body;
+  const cacheKey = generateCacheKey(searchTerm.split(" "), mealType);
+
+  if (resultCache[cacheKey]) {
+    console.log("Returning cached result");
+    return res.json({ metaphorResults: resultCache[cacheKey] });
+  }
+
+  try {
+    const dishNames = await fetchDishNamesFromOpenAI(searchTerm, mealType);
+    const recipeLinks = await fetchRecipeLinksForDishes(dishNames);
+
+    resultCache[cacheKey] = recipeLinks; // Store results in cache
+    res.json({ metaphorResults: recipeLinks });
+  } catch (error) {
+    console.error("Error processing the search request:", error.message);
+    res.status(500).json({ error: "Error processing the request." });
+  }
+}
+
+async function fetchDishNamesFromOpenAI(searchTerm, mealType) {
+  const prompt = `What can be made with mainly ${searchTerm} for ${mealType}, give list of 6 top dishes sorted by popularity`;
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  const content = response.choices[0].message.content;
+  return [...content.matchAll(/\d+\.\s(.*?):/g)].map((match) => match[1]);
+}
+
 async function fetchRecipeLinksForDishes(dishNames) {
   const recipeLinks = [];
 
@@ -96,5 +115,9 @@ async function fetchRecipeLinksForDishes(dishNames) {
 
   return recipeLinks;
 }
+
+initializeMiddlewares();
+initializeServer();
+app.post("/search", limiter, handleSearchRequest);
 
 export default app;
