@@ -9,20 +9,20 @@ import "./FridgeFlix.css";
 
 const VEGETABLES = [
   "avocado", "bell peppers", "broccoli", "cabbage", "carrots", "cauliflower", "celery", "cucumber", "garlic", "lettuce", "mushrooms", "olives", "onions", "peppers", "potatoes", "spinach", "tomatoes"
-]
+];
 
 const PROTEINS = [
   "anchovies", "beef", "bread", "butter", "cheese", "chicken", "clams", "crab", "duck", "eggs", "fish", "lamb", "lobster", "salmon", "sardines", "shrimp", "tofu", "trout", "turkey", "tuna"
-]
+];
 
 const SPICES = [
   "basil", "black pepper", "cardamom", "chili powder", "chives", "cilantro", "cinnamon", "cloves", "coriander", "cumin", "fennel", "ginger", "mint", "nutmeg", "oregano", "paprika", "parsley", "rosemary", "saffron", "salt", "thyme", "turmeric"
-]
+];
 
 const SearchComponent = () => {
   const [selectedWords, setSelectedWords] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleWordClick = useCallback(
     (word) => {
@@ -53,6 +53,10 @@ const SearchComponent = () => {
       setIsLoading(false);
     }
   }, [selectedWords]);
+
+  const handleReset = () => {
+    setSelectedWords([]); // Clearing the selected words
+  };
 
   useEffect(() => {
     if (recipes.length > 0) {
@@ -99,13 +103,16 @@ const SearchComponent = () => {
         headerClass="word-cloud-header"
       />
       <Button
-    className="generate-recipes-button"
-    onClick={handleSearch}
-    disabled={isLoading}
-    startIcon={isLoading ? <CircularProgress size={24} /> : null}
->
-    {isLoading ? "Generating" : "Generate!"}
-</Button>
+        className="generate-recipes-button"
+        onClick={handleSearch}
+        disabled={isLoading}
+        startIcon={isLoading ? <CircularProgress size={24} /> : null}
+      >
+        {isLoading ? "Generating" : "Generate!"}
+      </Button>
+      <div className="reset-link" onClick={handleReset}>
+        Reset Selection
+      </div>
       <RecipeResults recipes={recipes} />
     </div>
   );
