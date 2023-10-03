@@ -19,17 +19,6 @@ const PORT = process.env.PORT || 9000;
 initializeMiddlewares();
 initializeServer();
 
-app.get("/search", async (req, res) => {
-  const searchTerm = req.query.searchTerm;
-  const query = `Here is the best recipe for ${searchTerm}:`;
-  const response = await metaphor.search(query, {
-    numResults: 5,
-    useAutoprompt: true,
-    type: "neural",
-  });
-  const links = response.results.map((result) => result.url);
-  return res.json({ links });
-});
 app.post("/search", handleSearchRequest);
 
 function initializeMiddlewares() {
