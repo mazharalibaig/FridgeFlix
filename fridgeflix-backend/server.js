@@ -3,7 +3,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { config } from "dotenv";
 import OpenAI from "openai";
-import axios from "axios";
+import Metaphor from "metaphor-node"
+
+const metaphor = new Metaphor(process.env.METAPHOR_API_KEY);
 
 config();
 
@@ -61,17 +63,7 @@ async function fetchRecipeLinksForDishes(dishNames) {
     
     for (const dish of dishNames) {
         const query = `Here is the best recipe for ${dish}:`;
-        const response = await axios.post('https://api.metaphor.systems/search', {
-            query,
-            numResults: 5,
-            useAutoprompt: true,
-            type: "neural"
-        }, {
-            headers: {
-                'x-api-key': process.env.METAPHOR_API_KEY,
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await metaphor.search(query, {numResults: 5, useAutoprompt: true, type: "neural"})
         
         const links = response.data.results.map(result => result.url);
         recipeLinks.push({ [dish]: links });
