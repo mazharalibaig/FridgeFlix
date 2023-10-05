@@ -1,0 +1,17 @@
+export const WORD_CLOUD = [
+    "chicken",
+    "rice",
+    "potatoes",
+    "onions",
+    "bell peppers",
+    "beef",
+    "broccoli",
+    "bread",
+    "milk",
+    "eggs",
+    "cheese",
+    "lettuce",
+    "tomatoes",
+    "butter",
+    "garlic",
+  ];  

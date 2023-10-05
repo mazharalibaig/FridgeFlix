@@ -4,6 +4,7 @@ body {
   background-color: #141414;
   color: white;
   font-family: "Bebas Neue", Arial, sans-serif;
+  margin: 0;
 }
 
 .container {
@@ -13,6 +14,12 @@ body {
   padding: 20px;
 }
 
+/* Remove white bullets from lists */
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
 .banner {
   font-size: 100px;
   margin-bottom: 50px;
@@ -20,7 +27,7 @@ body {
   letter-spacing: 3px;
 }
 
-.word-cloud-header {
+.word-cloud-header, .meal-type-header {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 15px;
@@ -28,10 +35,8 @@ body {
 }
 
 .meal-type-header {
-  text-align: center;
   font-size: 2.2rem;
   margin-bottom: 25px;
-  color: #e50914;
 }
 
 .word-cloud {
@@ -255,4 +260,11 @@ a:hover {
 
 .footer a:hover {
   color: #ff3333; /* Slightly brighter red on hover */
+}
+
+@media only screen and (max-width: 768px) {
+  .recipe-results {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }

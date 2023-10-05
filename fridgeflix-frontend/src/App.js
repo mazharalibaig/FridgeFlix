@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
 import axios from "axios";
-import { Chip, Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import "./FridgeFlix.css";
 import { VEGETABLES, PROTEINS, SPICES } from "./Constants";
 import Banner from "./Banner";
-import WordCloud from "./WordCloud";
+import WordCloud from "./WordCloud.jsx";
 import RecipeResults from "./RecipeResults";
 import Footer from "./Footer";
 import { distributeWordsToRows } from "./utilities";
@@ -45,7 +45,7 @@ const SearchComponent = () => {
 
     try {
       const response = await axios.post(
-        "https://0129-2601-282-4100-9f10-68d5-7d8f-1bf5-2e12.ngrok-free.app/search",
+        "https://ada0-2601-282-4100-9f10-8805-7e7a-43a8-3a01.ngrok-free.app/search",
         {
           searchTerm: ingredients.join(" "),
           mealType: mealType,
