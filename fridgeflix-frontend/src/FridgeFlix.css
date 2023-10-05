@@ -1,196 +1,270 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 body {
-    background-color: #141414;
-    color: white;
-    font-family: 'Bebas Neue', Arial, sans-serif;
+  background-color: #141414;
+  color: white;
+  font-family: "Bebas Neue", Arial, sans-serif;
+  margin: 0;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Remove white bullets from lists */
+ul {
+  list-style: none;
+  padding-left: 0;
 }
 
 .banner {
-    font-size: 72px;  /* Made larger as per your request */
-    margin-bottom: 40px;
-    color: #E50914;  /* Using Netflix Red for the banner */
-    letter-spacing: 2px;
+  font-size: 100px;
+  margin-bottom: 50px;
+  color: #e50914;
+  letter-spacing: 3px;
 }
 
-.search-bar {
-    width: 100%;
-    max-width: 600px;
-    background-color: white;
+.word-cloud-header, .meal-type-header {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #e50914;
+}
+
+.meal-type-header {
+  font-size: 2.2rem;
+  margin-bottom: 25px;
 }
 
 .word-cloud {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 20px;
-    align-items: center;
-    width: 100%;
-    max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 650px;
 }
 
 .word-row {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
-/* ... (rest of your CSS) ... */
-
-/* General styling for word chips to ensure consistent font */
-.word-chip.MuiChip-outlined .MuiChip-label, 
+.word-chip.MuiChip-outlined .MuiChip-label,
 .word-chip-selected.MuiChip-outlined .MuiChip-label {
-    font-family: 'Bebas Neue', Arial, sans-serif; /* Apply Netflix-like font */
-    font-size: 1rem; /* Size as needed */
-    text-transform: uppercase; /* Make it uppercase to fit the theme */
+  font-family: "Bebas Neue", Arial, sans-serif;
+  font-size: 1.2rem;
+  text-transform: uppercase;
 }
 
-/* Default state for word chips (Before selecting) */
 .word-chip.MuiChip-outlined {
-    cursor: pointer;
-    background-color: transparent; /* Transparent or use #141414 (dark gray close to Netflix's BG color) */
-    color: white; /* White text color */
-    font-weight: bold;
-    border: 1px solid #E50914; /* Netflix Red border */
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #e50914;
 }
 
-/* Hover effect for the word chips */
 .word-chip.MuiChip-outlined:hover {
-    background-color: rgba(229, 9, 20, 0.2); /* Slightly transparent Netflix Red for subtle effect */
+  background-color: rgba(229, 9, 20, 0.2);
 }
 
-/* Selected state for word chips (After selecting) */
 .word-chip-selected.MuiChip-outlined {
-    background-color: #E50914; /* Netflix Red */
-    color: white; /* White text */
-    border: 1px solid white; /* White border */
+  background-color: #e50914;
+  color: white;
+  border: 1px solid white;
 }
 
-
-
-
-
-/* ... (rest of your CSS) ... */
-
-/* Default state for word chips (Before selecting) */
-.word-chip {
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
-    background-color: #E50914; /* Netflix Red */
-    border-color: white;   /* White outline */
-    color: white;          /* White text color */
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-/* Hover effect for the word chips (slight opacity change for interactivity) */
-.word-chip:hover {
-    background-color: rgba(229, 9, 20, 0.9);  /* Slightly transparent Netflix Red */
-}
-
-/* Selected state for word chips (After selecting) */
-.word-chip-selected {
-    background-color: white;  
-    border-color: white;        
-    color: black;               
-}
-
-
-.search-bar {
-    width: 100%;
-    max-width: 600px;
-    background-color: white;
-    border-radius: 25px;  /* Rounded edges */
-    overflow: hidden;  /* Ensures inner elements adhere to the rounded edges */
-}
-
-/* ... (rest of your CSS) ... */
-
-/* Style for the search input text */
-.search-bar .MuiInputBase-input {
-    color: black; /* Black text color for contrast against white background */
-    font-family: 'Bebas Neue', Arial, sans-serif; /* Use the Netflix-like font */
-    font-size: 1rem; /* Adjust size as needed */
-}
-
-/* Adjust the search bar border and remove notches */
-.search-bar .MuiOutlinedInput-root {
-    border-radius: 25px; /* Rounded edges */
-}
-
-.search-bar .MuiOutlinedInput-notchedOutline {
-    border-color: #E50914; /* Border color to match Netflix theme */
-    border-width: 2px; /* Making the border slightly thicker */
-}
-
-/* Hover effect for the outlined input border */
-.search-bar .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: white; /* White border color on hover */
-}
-
-/* When the search input is focused */
-.search-bar .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #E50914;
-}
-.search-bar .MuiInputLabel-outlined.Mui-focused {
-    color: #E50914;
-}
-
-/* Remove the notches from the search bar */
-.search-bar .MuiOutlinedInput-notchedOutline {
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-}
 .trademark-symbol {
-    font-size: 0.5em;
-    vertical-align: super;
+  font-size: 0.5em;
+  vertical-align: super;
 }
 
 .recipe-results {
-    margin-top: 40px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* Three dishes in one row */
-    gap: 20px 50px; /* Gap between rows and columns */
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px 50px;
+}
+
+.recipe-item {
+  text-align: center;
+}
+
+.recipe-item .recipe-title {
+  cursor: default; /* Changing the cursor to default so it doesn't look clickable */
+  transition: background-color 0.3s;
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.5em;
+  border-radius: 30px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  border: 3px solid #e50914;
+  background-color: #e50914;
+  color: #fff;
+}
+
+.recipe-item .recipe-title:hover {
+  background-color: #e50914; /* Setting the hover background color to be the same as the original */
+  /* Removing the color change on hover */
+}
+
+a {
+  text-decoration: none;
+  color: #e50914;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #fff;
+}
+
+.meal-type-chip.MuiChip-outlined,
+.meal-type-chip-selected.MuiChip-outlined {
+  padding: 5px 12px; /* Ensuring a consistent padding for both states */
+}
+
+.meal-type-chip.MuiChip-outlined .MuiChip-label,
+.meal-type-chip-selected.MuiChip-outlined .MuiChip-label {
+  font-family: "Bebas Neue", Arial, sans-serif;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+.meal-type-chip.MuiChip-outlined {
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #e50914;
+  margin: 5px;
+}
+
+.meal-type-chip.MuiChip-outlined:hover {
+  background-color: rgba(229, 9, 20, 0.2);
+}
+
+.meal-type-chip-selected.MuiChip-outlined {
+  background-color: #e50914;
+  color: white;
+  border: 2px solid white;
+}
+
+.search-bar .MuiIconButton-root {
+  color: #e50914; /* Netflix Red */
+}
+
+.search-bar .MuiIconButton-root:hover {
+  background-color: rgba(
+    229,
+    9,
+    20,
+    0.2
+  ); /* Slightly transparent Netflix Red for subtle effect */
+}
+
+.search-bar .MuiCircularProgress-root {
+  color: #e50914; /* Netflix Red for the loader */
+}
+
+.container .generate-recipes-button {
+  background-color: #e50914; /* Netflix's signature red color */
+  color: white; /* White text color for contrast */
+  padding: 10px 20px; /* Adjusted padding */
+  border-radius: 50px; /* Fully rounded corners */
+  border: none;
+  font-size: 1.4rem; /* Adjusted font size */
+  font-family: "Bebas Neue", Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: 1.2px; /* Adjusted letter spacing */
+  transition: 0.3s ease-in-out; /* Transition effect for smooth hover animation */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Ensure content is centered */
+  width: 280px; /* Adjusted width */
+  cursor: pointer;
+  outline: none;
+  gap: 10px; /* Gap between loader and text */
+}
+
+.container .generate-recipes-button:hover {
+  background-color: #ff3333; /* Slightly brighter red on hover */
+}
+
+.container .generate-recipes-button:disabled {
+  background-color: #555; /* Darker color for disabled state */
+  cursor: not-allowed;
+}
+
+.container .generate-recipes-button .MuiCircularProgress-root {
+  color: white; /* Loader color */
+}
+
+.reset-link {
+  margin-top: 10px;
+  color: #e50914; /* Netflix Red */
+  cursor: pointer;
+  font-size: 1.2rem; /* Adjusted font size */
+  font-family: "Bebas Neue", Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: 1.2px; /* Adjusted letter spacing */
+  transition: 0.3s ease-in-out; /* Transition effect for smooth hover animation */
+  text-decoration: none; /* Removing any underlines */
+}
+
+.reset-link:hover {
+  color: #ff3333; /* Slightly brighter red on hover */
+}
+
+.custom-ingredient-input {
+  width: 50%;
+  padding: 5px 10px;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  color: #141414; /* making text color dark since the background is white */
+  outline: none; /* removing the browser's default outline effect */
+  font-size: 1rem; /* setting font size */
+  font-family: "Bebas Neue", Arial, sans-serif; /* using the same font as the rest of the UI */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* giving it a small shadow for a raised effect */
+  transition: box-shadow 0.3s ease; /* transition for smooth shadow effect on focus */
+}
+
+.custom-ingredient-input:focus {
+  box-shadow: 0px 0px 5px rgba(229, 9, 20, 0.7); /* changing shadow color to Netflix Red on focus */
+}
+
+.custom-ingredient-input::placeholder {
+  color: lightgrey;
+}
+
+.footer {
+  margin-top: 50px;
+  color: white;
+  font-size: 1rem;
+}
+
+.footer a {
+  color: #e50914; /* Netflix Red */
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #ff3333; /* Slightly brighter red on hover */
+}
+
+@media only screen and (max-width: 768px) {
+  .recipe-results {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-  
-  .recipe-item {
-    text-align: center;
-  }
-  
-  .recipe-item .recipe-title {
-    cursor: pointer;
-    transition: color 0.3s, background-color 0.3s;
-    display: inline-block;
-    padding: 15px 30px;
-    font-size: 1.5em;
-    border-radius: 30px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-    border: 3px solid #E50914;
-    background-color: #E50914;
-    color: #fff;
-  }
-  
-  .recipe-item .recipe-title:hover {
-    color: #E50914;
-    background-color: #fff;
-  }
-  
-  a {
-    text-decoration: none;
-    color: #E50914;
-    transition: color 0.3s;
-  }
-  
-  a:hover {
-    color: #fff;
-  }
-  
+}
